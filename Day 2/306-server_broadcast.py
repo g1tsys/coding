@@ -8,19 +8,12 @@ You need to implement an algorithm that calculates the **minimum number of broad
 ### Algorithm Steps:
 
 1. **Initialize**: Create a connectivity matrix `connectivity_matrix` from input, where `matrix[i][j] == 1` indicates that server i and server j are directly connected.
-
 2. **Create** a `visited` array to track which servers have already been visited. Initially set all values to `False`.
-
 3. **Initialize** the broadcast count `number_of_broadcasts` to 0.
-
 4. **Traverse** all servers. If a server has not been visited yet, perform a Breadth-First Search (BFS) starting from it.
-
 5. **During BFS**: Add the starting server to the queue and mark it as visited. Then for each server in the queue, traverse all servers that may be directly connected to it. If a server has not been visited, add it to the queue and mark it as visited.
-
 6. **When the BFS completes**, a complete connected component is found. At this point, increment the broadcast count by one.
-
 7. **Repeat** steps 4-6 until all servers have been visited.
-
 8. **Output** the final broadcast count, which is the minimum number of broadcasts required.
 
 ---
