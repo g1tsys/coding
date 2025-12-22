@@ -2,11 +2,9 @@
 # Python Coding Problem - Network Broadcast Algorithm
 
 ## Problem Translation
-
 You need to implement an algorithm that calculates the **minimum number of broadcasts** required to reach all servers in a network.
 
 ### Algorithm Steps:
-
 1. **Initialize**: Create a connectivity matrix `connectivity_matrix` from input, where `matrix[i][j] == 1` indicates that server i and server j are directly connected.
 2. **Create** a `visited` array to track which servers have already been visited. Initially set all values to `False`.
 3. **Initialize** the broadcast count `number_of_broadcasts` to 0.
@@ -77,12 +75,9 @@ Initial State:
 Step 1: Start at Server 0 (not visited)
 - BFS from 0: visits 0 → 1 → 2
 - Visited: [True, True, True, False, False]
-- Broadcasts: 1 (First connected component found)
-
+- Broadcasts: 1 (First connected component found
 Step 2: Server 1 (already visited, skip)
-
 Step 3: Server 2 (already visited, skip)
-
 Step 4: Start at Server 3 (not visited)
 - BFS from 3: visits 3 → 4
 - Visited: [True, True, True, True, True]
