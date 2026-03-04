@@ -106,8 +106,3 @@ sorted_heights = sorted(friend_heights, key=sort_key)
 # 输出排序结果
 print(" ".join(map(str, sorted_heights)))
 
-
-# AI version
-# start coding
-
-
