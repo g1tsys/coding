@@ -41,59 +41,41 @@
 """
 
 
-import java.util.*;
+def melt_silver(silver_weights):
+    # 排序银饰数组，使得我们可以每次选择最重的三块
+    silver_weights.sort(reverse=True)
 
-public class Main {
+    while len(silver_weights) > 2:
+        # 选出最重的三块
+        z, y, x = silver_weights[:3]
+        # 根据题目描述，移除这三块银饰
+        silver_weights = silver_weights[3:]
 
-    public static void main(String[] args) {
-        // 读取输入数据
-        Scanner scanner = new Scanner(System.in);
-        int n = scanner.nextInt(); // 银饰的数量
-        List<Integer> silverWeights = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            silverWeights.add(scanner.nextInt()); // 读取每个银饰的重量
-        }
-        scanner.close();
+        # 如果x、y、z不完全相等，我们需要将剩余的银块按照题目的规则添加回数组
+        if x != y or y != z:
+            if x == y:  # 如果 x 和 y 相等，则 z - y 无法被熔掉
+                silver_weights.append(z - y)
+            elif y == z:  # 如果 y 和 z 相等，则 y - x 无法被熔掉
+                silver_weights.append(y - x)
+            else:  # 如果三者都不相等，z - y 与 y - x 的差无法被熔掉
+                silver_weights.append(abs((z - y) - (y - x)))
 
-        // 调用函数并打印结果
-        int result = meltSilver(silverWeights);
-        System.out.println(result);
-    }
+        # 重新排序银饰数组，以便下次迭代选择最重的三块
+        silver_weights.sort(reverse=True)
 
-    public static int meltSilver(List<Integer> silverWeights) {
-        // 排序银饰数组，使得我们可以每次选择最重的三块
-        Collections.sort(silverWeights, Collections.reverseOrder());
+    # 按照题目的要求返回剩余的银饰
+    if len(silver_weights) == 2:
+        return max(silver_weights)
+    elif len(silver_weights) == 1:
+        return silver_weights[0]
+    else:
+        return 0
 
-        while (silverWeights.size() > 2) {
-            // 选出最重的三块
-            int z = silverWeights.get(0);
-            int y = silverWeights.get(1);
-            int x = silverWeights.get(2);
-            // 根据题目描述，移除这三块银饰
-            silverWeights = silverWeights.subList(3, silverWeights.size());
 
-            // 如果x、y、z不完全相等，我们需要将剩余的银块按照题目的规则添加回数组
-            if (x != y || y != z) {
-                if (x == y) {  // 如果 x 和 y 相等，则 z - y 无法被熔掉
-                    silverWeights.add(z - y);
-                } else if (y == z) {  // 如果 y 和 z 相等，则 y - x 无法被熔掉
-                    silverWeights.add(y - x);
-                } else {  // 如果三者都不相等，z - y 与 y - x 的差无法被熔掉
-                    silverWeights.add(Math.abs((z - y) - (y - x)));
-                }
-            }
+# 读取输入
+n = int(input())
+silver_weights = list(map(int, input().split()))
 
-            // 重新排序银饰数组，以便下次迭代选择最重的三块
-            Collections.sort(silverWeights, Collections.reverseOrder());
-        }
+# 调用函数并打印结果
+print(melt_silver(silver_weights))
 
-        // 按照题目的要求返回剩余的银饰
-        if (silverWeights.size() == 2) {
-            return Math.max(silverWeights.get(0), silverWeights.get(1));
-        } else if (silverWeights.size() == 1) {
-            return silverWeights.get(0);
-        } else {
-            return 0;
-        }
-    }
-}
