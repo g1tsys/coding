@@ -1,4 +1,4 @@
-"""
+'''
 给你一个字符串s,字符串s首尾相连成一个环形,请你在环中找出 T、'o'x'字符都恰好出现了偶数次最长子字
 符串的长度
 输入输出
@@ -33,7 +33,7 @@ Python 语言思路
 11.如果当前子字符串的长度不超过原字符串的长度n,更新最大长度max_len为max(max_len,curr_len).
 12.如果当前状态是首次出现,记录其位置i到status_positionns[status]
 13.返回最大长度maxlen。
-"""
+'''
 
 def find_longest_even_o(s):
     # 获取输入字符串的长度
