@@ -1,69 +1,106 @@
 """
-Based on the provided text and image, here is the extracted information about the problem:
+**问题描述：**  
+一位来自异国的客人使用 **m 进制**计数，其幸运数字为 **n**（满足 `n < m`）。当他在我国购买一个价值为 **k**（十进制）的商品时，需将价格折算为该国的 m 进制表示，并统计其中包含多少个幸运数字 **n**。
 
-### **Problem: Rock-Paper-Scissors Game (OD Exam)**
+**输入：**  
+一行三个整数：`k`（商品十进制价格）、`n`（幸运数字）、`m`（异国进制）
 
-**Description:**
-- Three possible moves: Rock (A), Scissors (B), Paper (C).
-- Rules: A > B, B > C, C > A (left side is stronger).
-- A player wins if their move is strictly stronger than all others.
-- If no single move is stronger, or multiple moves are equally strong, it's a tie.
-- Output the winner(s) or "NULL" if there's no winner.
+**输出：**  
+输出在 `k` 的 m 进制表示中，数字 `n` 出现的次数。  
+> 若输入非法，输出 `0`。
+**输入格式：**  
+第一行输入三个整数：`k`, `n`, `m`  
+- `k`：物品在我国的十进制价值  
+- `n`：客人的幸运数字（满足 `n < m`）  
+- `m`：客人所在国家使用的进制  
 
-**Input:**
-- Each line contains a player's ID (string of letters and digits) and their move (A, B, or C).
-- Number of players ≤ 1000.
+**输出格式：**  
+输出在将 `k` 转换为 `m` 进制后，其数字表示中包含多少个幸运数字 `n`。  
+> 若输入非法，输出 `0`。
 
-**Output:**
-- List of winning player IDs in ascending order.
-- If no winner, output "NULL".
+---
 
-**Image Content (Step-by-Step Solution):**
-1.  **Initialize:** Create a dictionary `players_by_shape` to store players for each move (A, B, C).
-2.  **Read Input:** Read each line, split into ID and move, and add the ID to the corresponding list in the dictionary.
-3.  **Determine Winner:**
-    - If only one move has players, or all three moves are present, return "NULL" (tie).
-    - Otherwise, determine the winning move (the one with the most players).
-    - Return the list of players who made the winning move.
-4.  **Output:** Sort the winning player IDs and print them, or print "NULL".
+**Python 解题思路：**  
+1. 将十进制数 `k` 转换为 `m` 进制，方法是不断除以 `m` 并记录余数，直到商为 0。  
+2. 将所有余数按从低位到高位的顺序反转，得到 `m` 进制表示。  
+3. 统计该进制表示中数字 `n` 出现的次数。  
+4. 若输入不合法（如 `n >= m` 或非整数等），直接返回 `0`。
+
+
+```text
+Python 语言思路
+
+将十进制转为其他进制的一般思路如下：
+
+1. 确定目标进制：确定要将十进制转换为哪种进制，常见的有二进制（base-2）、八进制（base-8）和十六进制（base-16）。
+
+2. 除以目标进制的基数：将十进制数依次除以目标进制的基数，并记录余数。例如，对于二进制，基数为2；对于八进制，基数为8；对于十六进制，基数为16。
+
+3. 重复步骤2直到商为0：重复上述步骤直到十进制数的商为0。每次得到的余数按照从低位到高位的顺序记录下来。
+
+4. 反转余数序列：将步骤3中得到的余数序列反转，得到最终的转换结果。
+
+5. 对于十六进制：如果转换为十六进制，需要将余数序列中的10-15分别表示为A-F，分别对应于十进制数10-15。
+
+以将十进制数27转换为二进制为例：
+
+1. 目标进制为二进制，基数为2。
+
+2. 27 ÷ 2 = 13，余数为1。
+   13 ÷ 2 = 6，余数为1。
+   6 ÷ 2 = 3，余数为0。
+   3 ÷ 2 = 1，余数为1。
+   1 ÷ 2 = 0，余数为1。
+
+3. 商为0，停止计算。
+
+4. 反转余数序列，得到11011，即27的二进制表示为11011。
+
+对于其他进制的转换，思路类似，只需要将基数和转换结果的符号调整为对应的进制即可。
+```
 """
-# 初始化一个字典，用于存储每种出拳形状的玩家列表
-# 出拳形状作为字典的键，玩家ID的列表作为值
-players_by_shape = {'A': [], 'B': [], 'C': []}
 
-# 读取输入并填充字典
-while True:
-    try:
-        line = input()  # 读取一行输入
-        if not line:
-            break  # 如果输入为空，跳出循环
-        player_id, shape = line.split()  # 将输入的一行以空格分开，得到玩家ID和出拳形状
-        players_by_shape[shape].append(player_id)  # 将玩家ID加入对应出拳形状的列表中
-    except EOFError:  # 读取到文件末尾时，EOFError将被抛出
-        break
+def count_lucky_number(k, n, m):
+    """
+    计算在m进制下，数字k中包含幸运数字n的个数。
 
+    参数:
+    k -- 购买的物品的十进制价值
+    n -- 幸运数字
+    m -- 使用的进制
 
-# 定义函数来判断谁是赢家
-def determine_winner(players_by_shape):
-    # 如果只有一种出拳形状，或者三种出拳形状都有玩家，那么判定为平局
-    if len([shape for shape, players in players_by_shape.items() if players]) != 2:
-        return "NULL"
+    返回:
+    count -- 幸运数字n在k的m进制表示中出现的次数
+    """
+    # 转换为m进制的字符串
+    k_base_m = ''
+    while k > 0:
+        k_base_m = str(k % m) + k_base_m
+        k = k // m
 
-    # 确定哪种出拳形状是优胜的
-    # 因为不是平局，所以必定有两种出拳形状
-    # 优胜的出拳形状必定是人数多的那个
-    shapes = [shape for shape in players_by_shape if players_by_shape[shape]]
-    winning_shape = 'A' if ('A' in shapes and 'B' in shapes) else 'B' if 'B' in shapes else 'C'
+    # 将幸运数字转换为m进制下的字符串
+    n_base_m = str(n)
 
-    # 返回优胜出拳形状的所有玩家ID列表
-    return sorted(players_by_shape[winning_shape])
+    # 计数幸运数字出现的次数
+    count = k_base_m.count(n_base_m)
+
+    return count
 
 
-# 调用函数并输出结果
-winners = determine_winner(players_by_shape)
-if winners == "NULL":
-    print(winners)
-else:
-    for winner in winners:
-        print(winner)
+# 读取输入并处理
+input_str = input().strip()
+try:
+    # 解析输入
+    k, n, m = map(int, input_str.split())
+
+    # 检查输入是否合法
+    if n >= m:
+        raise ValueError("幸运数字n需要小于进制m")
+
+    # 调用函数并输出结果
+    print(count_lucky_number(k, n, m))
+
+except (ValueError, IndexError):
+    # 如果解析输入出错或输入非法，输出0
+    print(0)
 
